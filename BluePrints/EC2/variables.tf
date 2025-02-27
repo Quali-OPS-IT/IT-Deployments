@@ -1,14 +1,14 @@
-# AWS region (shared across all blueprints)
 variable "aws_region" {
-  type    = string
-  default = "eu-west-1"
+  description = "AWS region"
+  type        = string
+  default     = "eu-west-1" 
 }
 
 # Common tags (example)
 variable "common_tags" {
   type = map(string)
   default = {
-    Project   = "Torque-Learning"
+    Project   = "IT-Torque-Learning"
     ManagedBy = "Terraform"
   }
 }

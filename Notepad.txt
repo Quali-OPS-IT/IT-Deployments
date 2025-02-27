@@ -1,0 +1,10 @@
+To use the variable for default AWS Region 
+provider "aws" {
+    region = var.aws_region  # Uses the shared variable 
+}
+
+TO use the variable for default AWS Tags: 
+resource "" {  
+    
+    tags = var.common_tags
+}
