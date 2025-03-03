@@ -38,9 +38,3 @@ variable "enable_cloud9" {
   type        = bool
   default     = false
 }
-
-# Bucket Name Prefix for Terraform State
-variable "s3_bucket_prefix" {
-  description = "Prefix for the S3 bucket name used for Terraform state"
-  type        = string
-  default     =
