@@ -36,5 +36,5 @@ variable "ec2_instance_type" {
 variable "enable_cloud9" {
   description = "Set to true to create a Cloud9 environment"
   type        = bool
-  default     = false
+  default     = true
 }
