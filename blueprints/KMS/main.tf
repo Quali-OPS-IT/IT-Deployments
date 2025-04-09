@@ -13,6 +13,6 @@ provider "aws" {
 
 resource "aws_kms_key" "kms_key" {
   description             = "${var.description}-key"
-  enable_key_rotation = var.enable_key_rotation
+  enable_key_rotation     = var.enable_key_rotation
   deletion_window_in_days = var.deletion_window_in_days
 }
