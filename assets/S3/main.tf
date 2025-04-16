@@ -1,3 +1,3 @@
-resource "aws_s3_bucket" "Quali-IT-S3" {
+resource "aws_s3_bucket" "Bucket" {
   bucket = var.bucket_name
 }
