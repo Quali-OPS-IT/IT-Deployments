@@ -19,7 +19,13 @@ variable "az" {
 variable "tags" {
   description = "Tags to apply to all resources"
   type        = map(string)
-  default     = {
+  default = {
     Name = "quali-it-vpc"
   }
+}
+
+variable "agent_id" {
+  description = "Agent ID for the Quali IT platform"
+  type        = string
+  default     = "it-deployments-eks"
 }

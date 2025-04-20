@@ -59,3 +59,8 @@ variable "size" {
     error_message = "Invalid database size. Options are: small, medium, or large."
   }
 }
+variable "agent_id" {
+  description = "Agent ID for the Quali IT platform"
+  type        = string
+  default     = "it-deployments-eks"
+}
