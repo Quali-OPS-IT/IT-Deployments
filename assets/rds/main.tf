@@ -79,7 +79,6 @@ resource "aws_db_instance" "default" {
   engine_version            = var.engine_version
   instance_class            = local.instance_class
   identifier                = "rds-${var.sandbox_id}"
-  name                      = var.db_name
   username                  = var.username
   password                  = random_password.password.result
   publicly_accessible       = true
