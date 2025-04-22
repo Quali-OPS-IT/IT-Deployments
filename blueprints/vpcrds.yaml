@@ -1,0 +1,110 @@
+spec_version: 2
+description: "Torque IAC asset"
+inputs:
+  vpc_availability_zone:
+    type: "string"
+    default: "eu-west-1a"
+    description: "Availability zone for the subnet"
+  vpc_name:
+    type: "string"
+    description: "Base name to tag VPC and Subnet"
+  vpc_subnet_cidr:
+    type: "string"
+    default: "192.168.1.0/24"
+    description: "CIDR block for the subnet"
+  vpc_vpc_cidr:
+    type: "string"
+    default: "192.168.0.0/16"
+    description: "CIDR block for the VPC"
+  agent:
+    type: "agent"
+  rds-secret_db_password:
+    type: "string"
+    description: "RDS master password"
+  rds-secret_db_username:
+    type: "string"
+    description: "RDS master username"
+  rds-secret_env_name:
+    type: "string"
+    description: "Environment name for naming the secret"
+  rds_db_name:
+    type: "string"
+    description: "The name of the database"
+  rds_identifier:
+    type: "string"
+    description: "The DB instance identifier"
+outputs:
+  vpc_subnet_id:
+    value: "{{ .grains.vpc.outputs.subnet_id }}"
+    quick: true
+  vpc_vpc_id:
+    value: "{{ .grains.vpc.outputs.vpc_id }}"
+    quick: true
+  rds_db_endpoint:
+    value: "{{ .grains.rds.outputs.db_endpoint }}"
+    quick: true
+  rds_db_identifier:
+    value: "{{ .grains.rds.outputs.db_identifier }}"
+    quick: true
+  rds_db_name:
+    value: "{{ .grains.rds.outputs.db_name }}"
+    quick: true
+  rds_db_port:
+    value: "{{ .grains.rds.outputs.db_port }}"
+    quick: true
+  rds_secret_arn:
+    value: "{{ .grains.rds-secret.outputs.rds_secret_arn }}"
+    quick: false
+grains:
+  vpc:
+    kind: "terraform"
+    spec:
+      source:
+        store: "DorTest"
+        path: "assets/vpc"
+      agent:
+        name: "{{ .inputs.agent }}"
+      env-vars: []
+      version: "1.5.5"
+      inputs:
+        - availability_zone: "{{ .inputs.vpc_availability_zone }}"
+        - name: "{{ .inputs.vpc_name }}"
+        - subnet_cidr: "{{ .inputs.vpc_subnet_cidr }}"
+        - vpc_cidr: "{{ .inputs.vpc_vpc_cidr }}"
+      outputs:
+        - "subnet_id"
+        - "vpc_id"
+  rds-secret:
+    kind: "terraform"
+    spec:
+      source:
+        store: "DorTest"
+        path: "assets/rds-secret"
+      agent:
+        name: "{{ .inputs.agent }}"
+      env-vars: []
+      version: "1.5.5"
+      inputs:
+        - db_password: "{{ .inputs.db_password }}"
+        - db_username: "{{ .inputs.db_username }}"
+        - env_name: "{{ .inputs.rds-secret_env_name }}"
+      outputs:
+        - "rds_secret_arn"
+    depends-on: "vpc"
+  rds:
+    kind: "terraform"
+    spec:
+      source:
+        store: "DorTest"
+        path: "assets/rds"
+      agent:
+        name: "{{ .inputs.agent }}"
+      env-vars: []
+      version: "1.5.5"
+      inputs:
+        - db_name: "{{ .inputs.rds_db_name }}"
+        - identifier: "{{ .inputs.rds_identifier }}"
+        - vpc_id: "{{ .grains.vpc.outputs.vpc_id }}"
+        - subnet_id: "{{ .grains.vpc.outputs.subnet_id }}"
+        - rds_secret_arn: "{{ .grains.rds-secret.outputs.rds_secret_arn }}"
+    depends-on: "rds-secret"
