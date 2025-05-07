@@ -23,5 +23,5 @@ variable "region" {
 variable "agent" {
   description = "The Torque agent that will be used to create the S3 bucket"
   type        = string
-  default     = "arn:aws:iam::123456789012:role/my-role"
+  default     = "it-deployments-eks"
 }
