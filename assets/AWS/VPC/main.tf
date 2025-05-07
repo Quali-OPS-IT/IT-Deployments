@@ -6,9 +6,11 @@ resource "aws_vpc" "quali_it_vpc" {
 }
 
 resource "aws_subnet" "app_subnet" {
+  count = length(var.subnet_cidr)
+
   vpc_id                  = aws_vpc.quali_it_vpc.id
-  cidr_block              = var.subnet_cidr
-  availability_zone       = var.az
+  cidr_block              = element(var.subnet_cidr, count.index)
+  availability_zone       = element(var.az, count.index)
   map_public_ip_on_launch = true
 
   tags = var.tags
@@ -17,18 +19,14 @@ resource "aws_subnet" "app_subnet" {
 resource "aws_security_group" "default_sg" {
   vpc_id = aws_vpc.quali_it_vpc.id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.security_group_ingress
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
   egress {
