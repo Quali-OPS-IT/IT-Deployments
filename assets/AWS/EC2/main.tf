@@ -16,12 +16,4 @@ resource "aws_instance" "web" {
   ami           = var.ami_id
   instance_type = var.instance_type
   subnet_id     = var.subnet_id
-
-  tags = merge(
-    var.common_tags, # Use common_tags variable directly
-    var.tags,        # Use tags variable directly
-    {                # Manual tags
-      Name = "Torque-EC2"
-    }
-  )
 }

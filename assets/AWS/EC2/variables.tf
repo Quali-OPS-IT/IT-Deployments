@@ -4,28 +4,14 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
-# Common tags (example)
-variable "common_tags" {
-  type = map(string)
-  default = {
-    Project   = "IT-Torque-Learning"
-    ManagedBy = "Terraform"
-  }
-}
-
-# Additional tags (example)
-variable "tags" {
-  type    = map(string)
-  default = {}
-}
-
 # AMI ID
 variable "ami_id" {
   type    = string
   default = "ami-073151717783c9ea5" # Ubuntu 20.04 LTS
 }
 
-# Instance type
+# Instance type 
+## add validation to ensure the instance type is valid
 variable "instance_type" {
   type    = string
   default = "t2.micro"
@@ -33,5 +19,11 @@ variable "instance_type" {
 variable "subnet_id" {
   description = "The ID of the subnet where the EC2 instance will be launched"
   type        = string
+}
+
+variable "agent_name" {
+  description = "The name of the agent"
+  type        = string
+  default     = "it-deployments-eks"
 
 }
