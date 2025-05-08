@@ -13,7 +13,7 @@ variable "username" {
 
 variable "region" {
   description = "Region of RDS"
-  default     = "us-east-1"
+  default     = "eu-west-1"
 }
 
 variable "engine" {
@@ -59,8 +59,8 @@ variable "size" {
     error_message = "Invalid database size. Options are: small, medium, or large."
   }
 }
-variable "agent_id" {
-  description = "Agent ID for the Quali IT platform"
+variable "agent" {
+  description = "The Torque agent that will be used to create the S3 bucket"
   type        = string
   default     = "it-deployments-eks"
 }
