@@ -36,10 +36,20 @@ variable "allocated_storage" {
 variable "username" {
   description = "The name of the master user for the database instance"
   type        = string
+  default     = "admin"
+  validation {
+    condition     = length(var.username) >= 1 && length(var.username) <= 16
+    error_message = "Username must be between 1 and 16 characters."
+  }
+  validation {
+    condition     = can(regex("^[a-zA-Z][a-zA-Z0-9]*$", var.username))
+    error_message = "Username must start with a letter and contain only alphanumeric characters."
+  }
 }
 variable "password" {
   description = "The password for the master database user"
   type        = string
+  sensitive   = true
 }
 variable "vpc_security_group_ids" {
   description = "A list of VPC security groups to associate with the RDS instance"
@@ -50,11 +60,21 @@ variable "subnet_ids" {
   type        = list(string)
 }
 variable "multi_az" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Specifies if the DB instance is a Multi-AZ deployment"
+  validation {
+    condition     = var.multi_az == true || var.multi_az == false
+    error_message = "multi_az must be either true or false."
+  }
 }
 
 variable "publicly_accessible" {
   type    = bool
   default = false
+}
+variable "agent" {
+  description = "The agent to use for the RDS instance"
+  type        = string
+  default     = "it-deployments-eks"
 }
