@@ -29,10 +29,12 @@ variable "instance_class" {
     error_message = "Instance class not recognized. Options: db.t2.micro, db.t2.small, db.t2.medium, db.t3.micro, db.t3.small, db.t3.medium."
   }
 }
+
 variable "allocated_storage" {
   type    = number
   default = 20
 }
+
 variable "username" {
   description = "The name of the master user for the database instance"
   type        = string
@@ -46,6 +48,7 @@ variable "username" {
     error_message = "Username must start with a letter and contain only alphanumeric characters."
   }
 }
+
 variable "password" {
   description = "The password for the master database user"
   type        = string
@@ -53,11 +56,11 @@ variable "password" {
 }
 variable "vpc_security_group_ids" {
   description = "A list of VPC security groups to associate with the RDS instance"
-  type        = list(string)
+  type        = string
 }
 variable "subnet_ids" {
   description = "A list of subnet IDs to associate with the RDS instance"
-  type        = list(string)
+  type        = string
 }
 variable "multi_az" {
   type        = bool
