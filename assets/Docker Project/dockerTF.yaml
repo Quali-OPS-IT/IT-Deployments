@@ -1,0 +1,9 @@
+spec_version: 2
+description: |
+  This is a Dockerfile for a Terraform project that uses the official Terraform image.
+outputs:
+  QualiX RDP Link:
+    value: '{{ .grains.Dockerfile.outputs.qualix_link }}'
+    kind: 'link'
+  VM IP:
+    value: '{{ .grains.SisenseIL.outputs.vsphere_virtual_machine_default_ip_address }}'
