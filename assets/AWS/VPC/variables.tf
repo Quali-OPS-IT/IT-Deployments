@@ -27,5 +27,5 @@ variable "tags" {
 variable "agent" {
   description = "Agent ID for the Quali IT platform"
   type        = string
-  default     = "it-deployments-eks"
+  default     = "it-eks"
 }
