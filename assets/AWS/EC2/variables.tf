@@ -20,10 +20,3 @@ variable "subnet_id" {
   description = "The ID of the subnet where the EC2 instance will be launched"
   type        = string
 }
-
-variable "agent_name" {
-  description = "The name of the agent"
-  type        = string
-  default     = "it-deployments-eks"
-
-}
