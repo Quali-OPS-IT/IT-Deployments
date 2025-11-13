@@ -1,17 +1,18 @@
 variable "db_name" {
-  description = "Database name to create (schema). Must begin with a letter."
+  description = "DataBase name to create (schema). Must begin with a letter."
   type        = string
-  default     = null
 }
 
 variable "engine_version" {
-  description = "MySQL engine version (e.g., 8.0.36)."
+  description = "Exact MySQL engine version. Leave null to let AWS pick the current default."
   type        = string
+  default     = null
 }
 
 variable "db_user" {
   description = "Master username."
   type        = string
+  default     = "admin"
 }
 
 variable "db_pass" {
@@ -22,8 +23,8 @@ variable "db_pass" {
 
 variable "storage_type" {
   description = "Storage type: gp3 (recommended), gp2, io1, or standard (magnetic)."
-  type        = string
-  default     = "gp3"
+  type        = set(string)
+  default     = ["gp3","gp2","io1","standard"]
   validation {
     condition     = contains(["gp3","gp2","io1","standard"], lower(var.storage_type))
     error_message = "storage_type must be one of: gp3, gp2, io1, standard."

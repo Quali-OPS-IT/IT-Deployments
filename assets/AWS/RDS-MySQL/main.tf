@@ -17,10 +17,8 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_db_instance" "this" {
-  identifier                 = null           # let AWS generate, or set your own
   engine                     = "mysql"
   engine_version             = var.engine_version
-
   instance_class             = var.db_vm_type
 
   # Storage
