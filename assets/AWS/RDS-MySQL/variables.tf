@@ -23,8 +23,8 @@ variable "db_pass" {
 
 variable "storage_type" {
   description = "Storage type: gp3 (recommended), gp2, io1, or standard (magnetic)."
-  type        = set(string)
-  default     = ["gp3","gp2","io1","standard"]
+  type        = string
+  default     = "gp3"
   validation {
     condition     = contains(["gp3","gp2","io1","standard"], lower(var.storage_type))
     error_message = "storage_type must be one of: gp3, gp2, io1, standard."
@@ -32,24 +32,25 @@ variable "storage_type" {
 }
 
 variable "storage_size" {
-  description = "Allocated storage in GB."
+  description = "Allocated storage in GB. Minimum: 20 GiB. Maximum: 65,536 GiB."
   type        = number
   default     = 20
 }
 
 variable "db_vm_type" {
-  description = "DB instance class, e.g., db.t3.medium, db.r6g.large."
+  description = "DB instance class."
   type        = string
+  default     = "null"
 }
 
 variable "public" {
-  description = "Whether the instance gets a public IP (publicly_accessible)."
+  description = "Whether the instance gets a public IP."
   type        = bool
   default     = false
 }
 
 variable "subnet_ids" {
-  description = "Private subnet IDs for the DB subnet group (2+ recommended)."
+  description = "Private subnet IDs for the DB subnet group."
   type        = list(string)
   default     = []
 }
