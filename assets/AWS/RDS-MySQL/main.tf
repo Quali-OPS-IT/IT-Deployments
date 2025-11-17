@@ -7,6 +7,9 @@ terraform {
     }
   }
 }
+provider "aws" {
+  region  = "eu-west-1" 
+}
 
 # Optional: create a DB subnet group if subnet_ids provided
 resource "aws_db_subnet_group" "this" {
@@ -16,7 +19,7 @@ resource "aws_db_subnet_group" "this" {
   subnet_ids  = var.subnet_ids
 }
 
-resource "aws_db_instance" "this" {
+resource "aws_db_instance" "MySQL" {
   engine                     = "mysql"
   engine_version             = var.engine_version
   instance_class             = var.db_vm_type
