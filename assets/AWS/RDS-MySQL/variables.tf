@@ -12,6 +12,7 @@ variable "engine_version" {
 variable "db_user" {
   description = "Master username."
   type        = string
+  default     = "admin"
 }
 
 variable "db_pass" {
