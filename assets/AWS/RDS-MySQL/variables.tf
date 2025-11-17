@@ -12,7 +12,6 @@ variable "engine_version" {
 variable "db_user" {
   description = "Master username."
   type        = string
-  default     = "admin"
 }
 
 variable "db_pass" {
@@ -38,9 +37,9 @@ variable "storage_size" {
 }
 
 variable "db_vm_type" {
-  description = "DB instance class."
+  description = "RDS DB instance class (e.g. db.t3.micro, db.t3.small, db.t4g.micro)."
   type        = string
-  default     = "null"
+  default     = "db.t3.micro"
 }
 
 variable "public" {
