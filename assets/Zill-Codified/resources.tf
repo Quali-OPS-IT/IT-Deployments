@@ -1,4 +1,4 @@
-resource "aws_instance" "instance_wsrqvf0" {
+resource "aws_instance" "instance_0kl2supq" {
   provider = aws.eu_west_1
   ami = "ami-08b6a2983df6e9e25"
   associate_public_ip_address = true
@@ -12,12 +12,12 @@ resource "aws_instance" "instance_wsrqvf0" {
   host_resource_group_arn = null
   iam_instance_profile = "AmazonSSMRoleForInstancesQuickSetup"
   instance_initiated_shutdown_behavior = "stop"
-  instance_type = "t2.small"
+  instance_type = "t3.small"
   key_name = "IT-Deployments-Key-Pair"
   monitoring = false
   placement_group = null
   placement_partition_number = 0
-  private_ip = "172.31.5.155"
+  private_ip = "172.31.0.38"
   secondary_private_ips = [
   ]
   security_groups = [
@@ -80,7 +80,7 @@ resource "aws_instance" "instance_wsrqvf0" {
     volume_type = "gp3"
   }
 }
-resource "aws_instance" "instance_uf2ldsr" {
+resource "aws_instance" "instance_46mbj3m" {
   provider = aws.eu_west_1
   ami = "ami-08b6a2983df6e9e25"
   associate_public_ip_address = true
@@ -94,12 +94,12 @@ resource "aws_instance" "instance_uf2ldsr" {
   host_resource_group_arn = null
   iam_instance_profile = "AmazonSSMRoleForInstancesQuickSetup"
   instance_initiated_shutdown_behavior = "stop"
-  instance_type = "t2.small"
+  instance_type = "t3.small"
   key_name = "IT-Deployments-Key-Pair"
   monitoring = false
   placement_group = null
   placement_partition_number = 0
-  private_ip = "172.31.0.38"
+  private_ip = "172.31.5.155"
   secondary_private_ips = [
   ]
   security_groups = [
