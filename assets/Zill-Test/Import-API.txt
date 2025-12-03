@@ -20,13 +20,14 @@ curl --request POST \
       },
       "source": {
           "store": "IT-Deployments",
-          "path": "Zill-Test"
+          "path": "assets/Zill-Test"
+          "branch": "main"
       },
       "backend": {
-        type: "s3",
-        bucket: "torque-tfstate-831926626521",
-        region: "eu-west-1",
-        key: "terraform[1].tfstate"
+        "type": "s3",
+        "bucket": "torque-tfstate-831926626521",
+        "region": "eu-west-1",
+        "key": "terraform[1].tfstate"
       }
     }
   ]
