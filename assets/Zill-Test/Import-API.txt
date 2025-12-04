@@ -20,7 +20,7 @@ curl --request POST \
       },
       "source": {
           "store": "IT-Deployments",
-          "path": "assets/Zill-Test"
+          "path": "assets/Zill-Test",
           "branch": "main"
       },
       "backend": {
