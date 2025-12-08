@@ -77,6 +77,6 @@ resource "aws_instance" "instance_a6bpod5d" {
     }
     throughput = 0
     volume_size = 8
-    volume_type = "gp2"
+    volume_type = "gp3"
   }
 }

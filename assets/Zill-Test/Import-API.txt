@@ -11,13 +11,13 @@ curl --request POST \
   "grains": [
     {
       "kind": "terraform",
-      "name": "Zill-Test",
+      "name": "Zill-Test-2",
       "agent": {
         "name": "eks",
       },
       "source": {
           "store": "IT-Deployments",
-          "path": "assets/Zill-Test",
+          "path": "assets/Zill-Test-2",
           "branch": "main"
       },
       "backend": {
