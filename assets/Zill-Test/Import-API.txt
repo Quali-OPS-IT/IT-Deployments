@@ -8,15 +8,12 @@ curl --request POST \
   "description": "string",
   "owner_email": "dor.p@quali.com",
   "enable_termination_protection": false,
-  "visibility": "normal",
-  "notes": "string",
   "grains": [
     {
       "kind": "terraform",
-      "name": "Zill_Test",
+      "name": "Zill-Test",
       "agent": {
-        "name": "it-eks",
-        "service_account": "default"
+        "name": "eks",
       },
       "source": {
           "store": "IT-Deployments",
@@ -28,7 +25,10 @@ curl --request POST \
         "bucket": "torque-tfstate-831926626521",
         "region": "eu-west-1",
         "key": "terraform[1].tfstate"
-      }
+      },
     }
-  ]
+  ],
+  "inputs": {
+    "agent": "eks",
+  },
 }
