@@ -162,3 +162,7 @@ resource "aws_instance" "instance_b1ssl9vf" {
     volume_type = "gp3"
   }
 }
+<<<<<<< ours
+=======
+
+>>>>>>> theirs

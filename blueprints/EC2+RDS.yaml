@@ -1,0 +1,219 @@
+spec_version: 2
+description: AWS EC2 + RDS stack provisioning blueprint. 
+labels:
+- cloud: aws
+- category: stack
+- compute: ec2
+- database: rds
+metadata:
+  self-service: true
+  display-name: AWS EC2 + RDS
+  icon: AWS
+inputs:
+  agent:
+    type: agent
+#  aws_credential:
+#    type: string
+#    default: "AWS TorqueDemo Production"
+#    description: AWS TorqueDemo Production
+  region:
+    type: parameter
+    parameter-name: service_catalog_aws_regions_supported
+    default: us-east-1
+    
+  vpc_id:
+    type: input-source
+    source-name: service_catalog_aws_network_discovery
+    depends-on: region
+    overrides:
+      - query: 'resource=vpcs&region={{ .inputs.region }}'
+
+  ec2_subnet_id:
+    type: input-source
+    source-name: service_catalog_aws_network_discovery
+    depends-on: vpc_id
+    overrides:
+      - query: 'resource=subnets&vpc_id={{ .inputs.vpc_id }}&purpose=ec2'
+
+  rds_subnet_ids:
+    type: input-source
+    source-name: service_catalog_aws_network_discovery
+    style: multi-select
+    depends-on: vpc_id
+    overrides:
+      - query: 'resource=subnets&vpc_id={{ .inputs.vpc_id }}&purpose=rds'
+
+  os_family:
+    type: parameter
+    parameter-name: service_catalog_ec2_os_families
+    description: High-level OS family (drives the next selection list).
+  os_selection:
+    depends-on: os_family
+    type: parameter
+    parameter-name: service_catalog_ec2_os_{{ .inputs.os_family }}_selections
+    description: OS choice value expected by the EC2 Terraform module.
+  cpu_arch:
+    depends-on: os_family
+    type: parameter
+    parameter-name: service_catalog_ec2_arch_{{ .inputs.os_family }}
+    description: CPU architecture to drive instance-type choices (x86_64/arm64). Windows
+      should only expose x86_64 here.
+  instance_type:
+    depends-on: cpu_arch
+    type: parameter
+    parameter-name: service_catalog_ec2_instance_types_{{ .inputs.cpu_arch }}
+    default: t3.micro
+  engine_type:
+    type: parameter
+    parameter-name: service_catalog_engine_types
+    description: RDS database engine type.
+  engine_version:
+    depends-on: engine_type
+    type: parameter
+    parameter-name: service_catalog_engine_{{ .inputs.engine_type }}_versions
+    description: Engine version for the selected engine type.
+  db_instance_identifier:
+    type: string
+    description: Identifier of the DB instance.
+  db_name:
+    type: string
+    description: Initial database name created within the instance.
+  master_username:
+    type: string
+    pattern: ^[a-zA-Z][a-zA-Z0-9_]{0,15}$
+    validation-description: "Must start with a letter, contain only letters, digits,\
+      \ or underscore, and be 1\u201316 characters long."
+    description: Master username for the DB instance.
+  master_password:
+    type: string
+    sensitive: true
+    pattern: ^.{8,128}$
+    validation-description: Must be between 8 and 128 characters long.
+    description: Master password for the DB instance.
+  db_instance_class:
+    depends-on: engine_type
+    type: parameter
+    parameter-name: service_catalog_rds_{{ .inputs.engine_type }}_instance_classes
+    description: Instance class for the DB instance.
+  allocated_storage:
+    type: string
+    default: '20'
+    description: Allocated storage in GiB for the DB instance.
+  storage_type:
+    type: parameter
+    parameter-name: service_catalog_rds_storage_types
+    default: gp3
+    description: Storage type for the DB instance.
+  multi_az:
+    type: string
+    default: false
+    allowed-values:
+    - true
+    - false
+    description: Enables Multi-AZ deployment for the DB instance.
+  publicly_accessible:
+    type: string
+    default: false
+    allowed-values:
+    - true
+    - false
+    description: Controls whether the DB instance is publicly accessible.
+  backup_retention_period:
+    type: string
+    default: '7'
+    description: Backup retention period in days.
+  auto_minor_version_upgrade:
+    type: string
+    default: true
+    allowed-values:
+    - true
+    - false
+    description: Enables automatic minor version upgrades.
+  deletion_protection:
+    type: string
+    default: true
+    allowed-values:
+    - true
+    - false
+    description: Enables deletion protection for the DB instance.
+  storage_encrypted:
+    type: string
+    default: true
+    allowed-values:
+    - true
+    - false
+    description: Enables storage encryption for the DB instance.
+  kms_key_id:
+    type: string
+    description: KMS key ID or ARN used for storage encryption (optional).
+  tags:
+    type: string
+    description: Optional tags as JSON map, e.g. {"Owner":"Torque","Env":"Dev"} (only
+      used if TF module supports tags).
+grains:
+  ec2:
+    kind: terraform
+    spec:
+      version: 1.5.5
+      source:
+        store: TorqueServiceCatalog
+        path: assets/TF/AWS/EC2_Instance
+      agent:
+        name: '{{ .inputs.agent }}'
+#      authentication:
+#     - '{{ .inputs.credentials_aws_credential }}'
+      provider-overrides:
+      - name: aws
+        source: hashicorp/aws
+        version: ~> 5.0.0
+        attributes:
+          region: '{{ .inputs.region }}'
+      inputs:
+      - vpc_id: '{{ .inputs.vpc_id }}'
+      - subnet_id: '{{ .inputs.ec2_subnet_id }}'
+      - instance_type: '{{ .inputs.instance_type }}'
+      - os_selection: '{{ .inputs.os_selection }}'
+      outputs:
+      - instance_id
+      - private_ip
+      - security_group_id
+  rds:
+    kind: terraform
+    depends-on: ec2
+    spec:
+      version: 1.5.5
+      source:
+        store: TorqueServiceCatalog
+        path: assets/TF/AWS/RDS
+      agent:
+        name: '{{ .inputs.agent }}'
+#      authentication:
+#     - '{{ .inputs.credentials_aws_credential }}'
+      provider-overrides:
+      - name: aws
+        source: hashicorp/aws
+        version: ~> 5.0.0
+        attributes:
+          region: '{{ .inputs.region }}'
+      inputs:
+      - vpc_id: '{{ .inputs.vpc_id }}'
+      - subnet_ids: '{{ .inputs.rds_subnet_ids }}'
+      - engine: '{{ .inputs.engine_type }}'
+      - instance_class: '{{ .inputs.db_instance_class }}'
+      - allocated_storage: '{{ .inputs.allocated_storage }}'
+      - db_name: '{{ .inputs.db_name }}'
+      - username: '{{ .inputs.master_username }}'
+      - password: '{{ .inputs.master_password }}'
+      - allowed_security_group_ids: '["{{ .grains.ec2.outputs.security_group_id }}"]'
+      outputs:
+      - endpoint
+      - port
+outputs:
+  ec2_private_ip:
+    value: '{{ .grains.ec2.outputs.private_ip }}'
+  ec2_instance_id:
+    value: '{{ .grains.ec2.outputs.instance_id }}'
+  rds_endpoint:
+    value: '{{ .grains.rds.outputs.endpoint }}'
+  rds_port:
+    value: '{{ .grains.rds.outputs.port }}'
