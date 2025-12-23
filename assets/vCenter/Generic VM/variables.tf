@@ -22,19 +22,12 @@ variable "allow_unverified_ssl" {
 
 variable "datacenter" {
   type        = string
-  description = "vSphere Datacenter name"
+  description = "vSphere datacenter name"
 }
 
 variable "cluster" {
   type        = string
-  description = "vSphere Cluster name (used if resource_pool is not provided)"
-  default     = ""
-}
-
-variable "resource_pool" {
-  type        = string
-  description = "Optional: full resource pool path/name. If set, overrides cluster default resource pool."
-  default     = ""
+  description = "vSphere cluster name"
 }
 
 variable "datastore" {
@@ -44,7 +37,7 @@ variable "datastore" {
 
 variable "network_name" {
   type        = string
-  description = "Portgroup / Network name"
+  description = "Portgroup / network name (the network to connect the VM NIC to)"
 }
 
 variable "template_name" {
@@ -52,15 +45,9 @@ variable "template_name" {
   description = "Template VM name to clone from"
 }
 
-variable "folder" {
-  type        = string
-  description = "Optional VM folder path in vCenter (e.g. /DC/vm/Workloads). Leave empty to use default."
-  default     = ""
-}
-
 variable "vm_name" {
   type        = string
-  description = "VM name to create"
+  description = "Name of the VM to create"
 }
 
 variable "cpu" {
@@ -77,49 +64,24 @@ variable "memory_mb" {
 
 variable "disk_gb" {
   type        = number
-  description = "Primary disk size in GB (resizes disk0)"
-  default     = 50
+  description = "Disk0 size in GB. Set 0 to keep the template disk size."
+  default     = 0
 }
 
-# Networking: if ipv4 is empty => no guest customization (DHCP assumed)
 variable "ipv4" {
   type        = string
-  description = "Static IPv4 address. Leave empty for DHCP/no customization."
+  description = "Static IPv4 address. Leave empty for DHCP (no guest customization)."
   default     = ""
 }
 
 variable "netmask" {
   type        = number
-  description = "CIDR bits, e.g. 24 (only used for static)"
+  description = "IPv4 netmask bits (e.g., 24). Used only when ipv4 is set."
   default     = 24
 }
 
 variable "gateway" {
   type        = string
-  description = "IPv4 gateway (only used for static)"
+  description = "IPv4 gateway. Used only when ipv4 is set."
   default     = ""
-}
-
-variable "dns_servers" {
-  type        = string
-  description = "Comma-separated DNS servers (only used for static), e.g. 1.1.1.1,8.8.8.8"
-  default     = ""
-}
-
-variable "domain" {
-  type        = string
-  description = "DNS domain for linux guest customization (optional)"
-  default     = ""
-}
-
-variable "hostname" {
-  type        = string
-  description = "Hostname for linux guest customization (optional). If empty, uses vm_name (sanitized/truncated)."
-  default     = ""
-}
-
-variable "wait_for_guest_net_timeout" {
-  type        = number
-  description = "Seconds to wait for guest networking/IP reporting (VMware Tools required)."
-  default     = 600
 }
