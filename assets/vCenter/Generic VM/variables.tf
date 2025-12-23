@@ -25,9 +25,9 @@ variable "datacenter" {
   description = "vSphere datacenter name"
 }
 
-variable "cluster" {
+variable "resource_pool" {
   type        = string
-  description = "vSphere cluster name"
+  description = "vSphere resource pool name"
 }
 
 variable "datastore" {
