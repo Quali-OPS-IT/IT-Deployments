@@ -36,13 +36,12 @@ data "vsphere_virtual_machine" "template" {
 
 # Cluster is only required if resource_pool not provided
 data "vsphere_compute_cluster" "cluster" {
-  count         = trim(var.resource_pool) == "" ? 1 : 0
+  count         = trimspace(var.resource_pool) == "" ? 1 : 0
   name          = var.cluster
   datacenter_id = data.vsphere_datacenter.dc.id
 }
-
 data "vsphere_resource_pool" "rp" {
-  count         = trim(var.resource_pool) != "" ? 1 : 0
+  count         = trimspace(var.resource_pool) != "" ? 1 : 0
   name          = var.resource_pool
   datacenter_id = data.vsphere_datacenter.dc.id
 }
