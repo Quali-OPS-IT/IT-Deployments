@@ -15,10 +15,11 @@ variable "vcenter_password" {
 }
 
 variable "allow_unverified_ssl" {
-  type        = bool
-  description = "Allow insecure SSL for vCenter"
-  default     = true
+  type        = string
+  description = "Allow insecure SSL for vCenter (yes/no)"
+  default     = "yes"
 }
+
 
 variable "datacenter" {
   type        = string

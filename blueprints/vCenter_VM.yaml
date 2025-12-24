@@ -82,16 +82,15 @@ grains:
     kind: terraform
     spec:
       source:
-        store: github
-        path: assets/vCenter/Generic VM
+        store: IT-Deployments
+        path: assets/Generic VM
 
       # IMPORTANT: order should match variables.tf order
       inputs:
         - vcenter_server: '{{ .inputs.vcenter_server }}'
         - vcenter_user: '{{ .params.vcenter_user }}'
         - vcenter_password: '{{ .params.vcenter_password }}'
-        - allow_unverified_ssl: '{{ if eq .inputs.allow_unverified_ssl "yes" }}true{{ else }}false{{ end }}'
-
+        - allow_unverified_ssl: '{{ .inputs.allow_unverified_ssl }}'
         - datacenter: '{{ .inputs.datacenter }}'
         - resource_pool: '{{ .inputs.resource_pool }}'
         - datastore: '{{ .inputs.datastore }}'

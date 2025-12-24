@@ -2,7 +2,7 @@ provider "vsphere" {
   vsphere_server       = var.vcenter_server
   user                 = var.vcenter_user
   password             = var.vcenter_password
-  allow_unverified_ssl = var.allow_unverified_ssl
+  allow_unverified_ssl = lower(trimspace(var.allow_unverified_ssl)) == "yes"
 }
 
 locals {
