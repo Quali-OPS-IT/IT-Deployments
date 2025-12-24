@@ -6,6 +6,11 @@ metadata:
   icon: VMware
 
 inputs:
+  agent:
+    type: string
+    description: Agent to run the deployment
+    default: 	it-deployments-sandbox
+
   vcenter_server:
     type: string
     description: vCenter FQDN or IP
@@ -84,7 +89,8 @@ grains:
       source:
         store: IT-Deployments
         path: assets/Generic VM
-
+      agent:
+        name: '{{ .inputs.agent }}'
       # IMPORTANT: order should match variables.tf order
       inputs:
         - vcenter_server: '{{ .inputs.vcenter_server }}'
