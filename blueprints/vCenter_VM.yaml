@@ -87,6 +87,8 @@ grains:
   vsphere_vm:
     kind: terraform
     spec:
+      tags:
+        auto-tag: false    
       source:
         store: IT-Deployments
         path: 'assets/Generic_VM'
