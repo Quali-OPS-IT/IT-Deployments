@@ -1,0 +1,121 @@
+spec_version: 2
+description: Provision a generic VM on vCenter by cloning from a template.
+metadata:
+  self-service: true
+  display-name: vCenter Generic VM
+  icon: VMware
+
+inputs:
+  vcenter_server:
+    type: string
+    description: vCenter FQDN or IP
+    default: sandbox.qualisystems.local
+
+  allow_unverified_ssl:
+    type: string
+    description: Allow insecure SSL for vCenter (yes/no)
+    default: "yes"
+    allowed-values:
+      - "yes"
+      - "no"
+
+  datacenter:
+    type: string
+    description: vSphere datacenter name
+    default: SandBox
+
+  resource_pool:
+    type: string
+    description: vSphere resource pool path
+    default: /SandBox/host/192.168.42.113/Resources
+
+  datastore:
+    type: string
+    description: Datastore name (must match vCenter exactly)
+
+  network_name:
+    type: string
+    description: Portgroup / network name (must match vCenter exactly)
+    default: "Vlan 26 (General Use)"
+
+  template_name:
+    type: string
+    description: Full inventory path to template VM
+    default: /SandBox/vm/Clean Templates (Do Not Change, only IT)/Ubuntu 24.04.2 LTS
+
+  vm_name:
+    type: string
+    description: Name of the VM to create
+
+  cpu:
+    type: string
+    description: vCPU count (e.g. 2)
+    default: "2"
+
+  memory_mb:
+    type: string
+    description: Memory in MB (e.g. 4096)
+    default: "4096"
+
+  disk_gb:
+    type: string
+    description: Disk0 size in GB. Use 0 to keep the template disk size.
+    default: "0"
+
+  ipv4:
+    type: string
+    description: Static IPv4 address. Leave empty for DHCP.
+    default: ""
+
+  netmask:
+    type: string
+    description: IPv4 netmask bits. Used only when ipv4 is set.
+    default: "24"
+
+  gateway:
+    type: string
+    description: IPv4 gateway. Used only when ipv4 is set.
+    default: ""
+
+grains:
+  vsphere_vm:
+    kind: terraform
+    spec:
+      source:
+        store: github
+        path: assets/vCenter/Generic VM
+
+      # IMPORTANT: order should match variables.tf order
+      inputs:
+        - vcenter_server: '{{ .inputs.vcenter_server }}'
+        - vcenter_user: '{{ .params.vcenter_user }}'
+        - vcenter_password: '{{ .params.vcenter_password }}'
+        - allow_unverified_ssl: '{{ if eq .inputs.allow_unverified_ssl "yes" }}true{{ else }}false{{ end }}'
+
+        - datacenter: '{{ .inputs.datacenter }}'
+        - resource_pool: '{{ .inputs.resource_pool }}'
+        - datastore: '{{ .inputs.datastore }}'
+        - network_name: '{{ .inputs.network_name }}'
+        - template_name: '{{ .inputs.template_name }}'
+
+        - vm_name: '{{ .inputs.vm_name }}'
+        - cpu: '{{ .inputs.cpu }}'
+        - memory_mb: '{{ .inputs.memory_mb }}'
+        - disk_gb: '{{ .inputs.disk_gb }}'
+
+        - ipv4: '{{ .inputs.ipv4 }}'
+        - netmask: '{{ .inputs.netmask }}'
+        - gateway: '{{ .inputs.gateway }}'
+
+      outputs:
+        - vm_id
+        - vm_name
+        - ip_address
+
+outputs:
+  vm_id:
+    value: '{{ .grains.vsphere_vm.outputs.vm_id }}'
+  vm_name:
+    value: '{{ .grains.vsphere_vm.outputs.vm_name }}'
+  ip_address:
+    value: '{{ .grains.vsphere_vm.outputs.ip_address }}'
