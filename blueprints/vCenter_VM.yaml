@@ -89,7 +89,7 @@ grains:
     spec:
       source:
         store: IT-Deployments
-        path: 'assets/Generic VM'
+        path: 'assets/Generic_VM'
       agent:
         name: '{{ .inputs.agent }}'
       # IMPORTANT: order should match variables.tf order
