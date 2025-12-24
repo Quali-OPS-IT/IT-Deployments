@@ -77,6 +77,7 @@ inputs:
     description: IPv4 netmask bits. Used only when ipv4 is set.
     default: "24"
 
+
   gateway:
     type: string
     description: IPv4 gateway. Used only when ipv4 is set.
