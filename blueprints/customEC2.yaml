@@ -1,0 +1,173 @@
+spec_version: 2
+description: Cutomized EC2 Building Block
+inputs:
+  AMI:
+    type: string
+    default: ami-08982f1c5bf93d976
+    description: Instance AMI ID
+  Name:
+    type: string
+  associate_public_ip_address:
+    type: string
+    allowed-values:
+      - 'true'
+      - 'false'
+    default: 'true'
+    description: If True - IPv4 Public IP will be auto-assigned to the instance
+  instance_type:
+    type: parameter
+    parameter-name: allowed_instance_types
+    description: Instance type for new instance
+  Region:
+    type: string
+    description: AWS Region
+  SubnetID:
+    type: string
+    description: ID of The subnet the Instance will be created in
+outputs:
+  id:
+    value: '{{ .grains.["Community EC2"].outputs.id }}'
+    quick: false
+  private_ip:
+    value: '{{ .grains.["Community EC2"].outputs.private_ip }}'
+    quick: false
+  public_ip:
+    value: '{{ .grains.["Community EC2"].outputs.public_ip }}'
+    quick: false
+grains:
+  Community EC2:
+    kind: terraform
+    spec:
+      source:
+        store: ProductionBPs
+        path: assets/terraform/aws/01_community_ec2
+      agent:
+        name: '{{ .params.default_eks_host }}'
+      inputs:
+        - ami: '{{ .inputs.AMI }}'
+        - ami_ssm_parameter: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+        - associate_public_ip_address: '{{ .inputs.associate_public_ip_address }}'
+        - availability_zone: 'null'
+        - capacity_reservation_specification: 'null'
+        - cpu_credits: 'null'
+        - cpu_options: 'null'
+        - create: 'true'
+        - create_eip: 'false'
+        - create_iam_instance_profile: 'false'
+        - create_security_group: 'true'
+        - create_spot_instance: 'false'
+        - disable_api_stop: 'null'
+        - disable_api_termination: 'null'
+        - ebs_optimized: 'null'
+        - ebs_volumes: 'null'
+        - eip_domain: vpc
+        - eip_tags: '{}'
+        - enable_primary_ipv6: 'null'
+        - enable_volume_tags: 'true'
+        - enclave_options_enabled: 'null'
+        - ephemeral_block_device: 'null'
+        - get_password_data: 'null'
+        - hibernation: 'null'
+        - host_id: 'null'
+        - host_resource_group_arn: 'null'
+        - iam_instance_profile: 'null'
+        - iam_role_description: 'null'
+        - iam_role_name: 'null'
+        - iam_role_path: 'null'
+        - iam_role_permissions_boundary: 'null'
+        - iam_role_policies: '{}'
+        - iam_role_tags: '{}'
+        - iam_role_use_name_prefix: 'true'
+        - ignore_ami_changes: 'false'
+        - instance_initiated_shutdown_behavior: 'null'
+        - instance_market_options: 'null'
+        - instance_tags: '{}'
+        - instance_type: '{{ .inputs.instance_type }}'
+        - ipv6_address_count: 'null'
+        - ipv6_addresses: 'null'
+        - key_name: 'null'
+        - launch_template: 'null'
+        - maintenance_options: 'null'
+        - metadata_options: |-
+            {
+              "http_endpoint": "enabled",
+              "http_put_response_hop_limit": 1,
+              "http_tokens": "required"
+            }
+        - monitoring: 'null'
+        - name: '{{ .inputs.Name }}'
+        - network_interface: 'null'
+        - placement_group: 'null'
+        - placement_partition_number: 'null'
+        - private_dns_name_options: 'null'
+        - private_ip: 'null'
+        - region: '{{ .inputs.Region }}'
+        - root_block_device: 'null'
+        - secondary_private_ips: 'null'
+        - security_group_description: 'null'
+        - security_group_egress_rules: |-
+            {
+              "ipv4_default": {
+                "cidr_ipv4": "0.0.0.0/0",
+                "description": "Allow all IPv4 traffic",
+                "ip_protocol": "-1"
+              },
+              "ipv6_default": {
+                "cidr_ipv6": "::/0",
+                "description": "Allow all IPv6 traffic",
+                "ip_protocol": "-1"
+              }
+            }
+        - security_group_ingress_rules: 'null'
+        - security_group_name: 'null'
+        - security_group_tags: '{}'
+        - security_group_use_name_prefix: 'true'
+        - security_group_vpc_id: 'null'
+        - source_dest_check: 'null'
+        - spot_instance_interruption_behavior: 'null'
+        - spot_launch_group: 'null'
+        - spot_price: 'null'
+        - spot_type: 'null'
+        - spot_valid_from: 'null'
+        - spot_valid_until: 'null'
+        - spot_wait_for_fulfillment: 'null'
+        - subnet_id: '{{ .inputs.SubnetID }}'
+        - tags: '{}'
+        - tenancy: 'null'
+        - timeouts: '{}'
+        - user_data: 'null'
+        - user_data_base64: 'null'
+        - user_data_replace_on_change: 'null'
+        - volume_tags: '{}'
+        - vpc_security_group_ids: '[]'
+      outputs:
+        - ami
+        - arn
+        - availability_zone
+        - capacity_reservation_specification
+        - ebs_block_device
+        - ebs_volumes
+        - ephemeral_block_device
+        - iam_instance_profile_arn
+        - iam_instance_profile_id
+        - iam_instance_profile_unique
+        - iam_role_arn
+        - iam_role_name
+        - iam_role_unique_id
+        - id
+        - instance_state
+        - ipv6_addresses
+        - outpost_arn
+        - password_data
+        - primary_network_interface_id
+        - private_dns
+        - private_ip
+        - public_dns
+        - public_ip
+        - root_block_device
+        - security_group_arn
+        - security_group_id
+        - spot_bid_status
+        - spot_instance_id
+        - spot_request_state
+        - tags_all

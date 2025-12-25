@@ -23,5 +23,10 @@ variable "region" {
 variable "agent" {
   description = "The Torque agent that will be used to create the S3 bucket"
   type        = string
-  default     = "it-deployments-eks"
+  default     = "it-eks"
+}
+variable "aws_region" {
+  description = "The AWS region where resources will be created"
+  type        = string
+  default     = "eu-west-1"
 }
