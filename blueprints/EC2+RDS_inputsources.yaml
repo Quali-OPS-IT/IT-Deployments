@@ -38,7 +38,6 @@ inputs:
   rds_subnet_ids:
     type: input-source
     source-name: service_catalog_aws_network_discovery
-    style: multi-select
     depends-on: vpc_id
     overrides:
       - query: 'resource=subnets&vpc_id={{ .inputs.vpc_id }}&purpose=rds'
