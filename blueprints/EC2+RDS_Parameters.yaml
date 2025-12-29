@@ -22,27 +22,17 @@ inputs:
     default: us-east-1
     
   vpc_id:
-    type: input-source
-    source-name: service_catalog_aws_network_discovery
-    depends-on: region
-    overrides:
-      - query: 'resource=vpcs&region={{ .inputs.region }}'
+    type: string
+    description: VPC ID where the EC2 and RDS instances will be deployed.
 
   ec2_subnet_id:
-    type: input-source
-    source-name: service_catalog_aws_network_discovery
-    depends-on: vpc_id
-    overrides:
-      - query: 'resource=subnets&vpc_id={{ .inputs.vpc_id }}&purpose=ec2'
+    type: string
+    description: Subnet ID for the EC2 instance.
 
   rds_subnet_ids:
-    type: input-source
-    source-name: service_catalog_aws_network_discovery
-    style: multi-select
-    depends-on: vpc_id
-    overrides:
-      - query: 'resource=subnets&vpc_id={{ .inputs.vpc_id }}&purpose=rds'
-
+    type: string
+    description: Comma-separated Subnet IDs for the RDS instance.
+    
   os_family:
     type: parameter
     parameter-name: service_catalog_ec2_os_families
