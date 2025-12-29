@@ -156,8 +156,8 @@ grains:
     spec:
       version: 1.5.5
       source:
-        store: TorqueServiceCatalog
-        path: assets/TF/AWS/EC2_Instance
+        store: IT-Deployments
+        path: assets/AWS/EC2_Instance
       agent:
         name: '{{ .inputs.agent }}'
 #      authentication:
@@ -183,8 +183,8 @@ grains:
     spec:
       version: 1.5.5
       source:
-        store: TorqueServiceCatalog
-        path: assets/TF/AWS/RDS
+        store: IT-Deployments
+        path: assets/AWS/RDS
       agent:
         name: '{{ .inputs.agent }}'
 #      authentication:
