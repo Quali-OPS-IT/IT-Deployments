@@ -19,7 +19,6 @@ inputs:
   region:
     type: parameter
     parameter-name: service_catalog_aws_regions_supported
-    default: us-east-1
     
   vpc_id:
     type: input-source
@@ -145,10 +144,12 @@ inputs:
   kms_key_id:
     type: string
     description: KMS key ID or ARN used for storage encryption (optional).
+    
   tags:
     type: string
     description: Optional tags as JSON map, e.g. {"Owner":"Torque","Env":"Dev"} (only
       used if TF module supports tags).
+    default: 0
 grains:
   ec2:
     kind: terraform
