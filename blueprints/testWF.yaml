@@ -51,13 +51,13 @@ grains:
 
       # Stage the script onto the agent working directory
       files:
-        - source: scripts/upload_ISO_to_DS.sh
-          path: upload_ISO_to_DS.sh
+        - source: it-deployments-sandbox
+          path: scripts/upload_ISO_to_DS.sh
 
       activities:
         deploy:
           commands:
-            - chmod +x ./upload_ISO_to_DS.sh
+            - chmod +x ./scripts/upload_ISO_to_DS.sh
             - |
               VC_USER='{{ .params.vcenter_user }}' \
               VC_PASS='{{ .params.vcenter_password }}' \
@@ -68,4 +68,4 @@ grains:
               REMOTE_FOLDER='{{ .inputs.REMOTE_FOLDER }}' \
               {{- if .inputs.LOCAL_PATH }}LOCAL_PATH='{{ .inputs.LOCAL_PATH }}' \
               {{- end }}
-              bash ./upload_ISO_to_DS.sh
+              bash ./scripts/upload_ISO_to_DS.sh
