@@ -44,7 +44,7 @@ grains:
   validate:
     kind: shell
     source:
-        path: scripts/shell/stage_iso.sh
+        path: scripts/upload_ISO_to_DS.sh
         # If the script is in a different repo, specify 'store: repo_name' here
       
       # Map the inputs above + Secrets to Environment Variables
