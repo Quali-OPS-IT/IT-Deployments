@@ -1,0 +1,52 @@
+name: stage_iso_to_vcenter
+description: "Uploads an ISO from the Torque Agent to a vSphere Datastore"
+tags:
+  - staging
+  - vsphere
+
+# This defines the inputs you will see in the Torque UI
+inputs:
+  ISO_NAME:
+    type: string
+    description: "The filename of the ISO on the agent (e.g. ubuntu-22.04.iso)"
+    default: "ubuntu-22.04.iso"
+  
+  DC_NAME:
+    type: string
+    description: "The vSphere Datacenter name"
+    default: "SandBox"
+  
+  DS_NAME:
+    type: string
+    description: "The Target Datastore"
+    default: "Lab-datastore"
+  
+  REMOTE_FOLDER:
+    type: string
+    description: "The folder on the datastore to upload into"
+    default: "IT.ISO"
+
+  # Secrets are usually handled automatically if named correctly, 
+  # or you can pass them explicitly in the command section.
+
+# The script to run
+command:
+  # This tells Torque to download your repository scripts before running
+  source:
+    path: scripts/
+    # If the script is in a different repo, specify 'store: repo_name' here
+  
+  # Map the inputs above + Secrets to Environment Variables
+  environment:
+    VC_USER: "{{ .secrets.vcenter_user }}"       # Make sure this secret exists in Torque
+    VC_PASS: "{{ .secrets.vcenter_password }}"   # Make sure this secret exists in Torque
+    VC_URL: "vcenter.example.com"                # Hardcoded or add as input if it changes
+    DC_NAME: "{{ .inputs.DC_NAME }}"
+    DS_NAME: "{{ .inputs.DS_NAME }}"
+    ISO_NAME: "{{ .inputs.ISO_NAME }}"
+    REMOTE_FOLDER: "{{ .inputs.REMOTE_FOLDER }}"
+    TORQUE_OUTPUT_FILE: "{{ .torque.output_file }}" # Standard Torque output path
+
+  # Execute the script
+  execution:
+    command: bash stage_iso_workflow.sh
