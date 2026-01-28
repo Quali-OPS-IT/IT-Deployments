@@ -1,0 +1,72 @@
+spec_version: 2
+name: test_upload_iso_to_vcenter
+description: Run upload_ISO_to_DS.sh on a Torque agent
+
+workflow:
+  scope: space
+  triggers:
+    - type: manual
+
+inputs:
+  agent:
+    type: string
+    description: The Torque Agent to run this workflow on
+    default: it-deployments-sandbox
+
+  VC_URL:
+    type: string
+    description: vCenter FQDN or IP (no protocol)
+    default: sandbox.qualisystems.local
+
+  DC_NAME:
+    type: string
+    description: vSphere datacenter name
+    default: SandBox
+
+  DS_NAME:
+    type: string
+    description: Target datastore name (must match vCenter exactly)
+    default: Lab-datastore
+
+  ISO_NAME:
+    type: string
+    description: ISO filename on the agent
+    default: ubuntu-22.04.iso
+
+  REMOTE_FOLDER:
+    type: string
+    description: Folder in datastore to upload into (e.g., IT.ISO)
+    default: IT.ISO
+
+  LOCAL_PATH:
+    type: string
+    description: Optional full path to the ISO on the agent (leave empty to use default)
+    default: ""
+
+grains:
+  upload_iso:
+    kind: shell
+    spec:
+      agent:
+        name: "{{ .inputs.agent }}"
+
+      # Stage the script onto the agent working directory
+      files:
+        - source: scripts/upload_ISO_to_DS.sh
+          path: upload_ISO_to_DS.sh
+
+      activities:
+        - name: Upload ISO to Datastore
+          commands:
+            - chmod +x ./upload_ISO_to_DS.sh
+            - |
+              VC_USER='{{ .params.vcenter_user }}' \
+              VC_PASS='{{ .params.vcenter_password }}' \
+              VC_URL='{{ .inputs.VC_URL }}' \
+              DC_NAME='{{ .inputs.DC_NAME }}' \
+              DS_NAME='{{ .inputs.DS_NAME }}' \
+              ISO_NAME='{{ .inputs.ISO_NAME }}' \
+              REMOTE_FOLDER='{{ .inputs.REMOTE_FOLDER }}' \
+              {{- if .inputs.LOCAL_PATH }}LOCAL_PATH='{{ .inputs.LOCAL_PATH }}' \
+              {{- end }}
+              bash ./upload_ISO_to_DS.sh
