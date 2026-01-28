@@ -51,7 +51,7 @@ grains:
 
       # Stage the script onto the agent working directory
       files:
-        - source: it-deployments-sandbox
+        - source: IT-Deployments
           path: scripts/upload_ISO_to_DS.sh
 
       activities:
